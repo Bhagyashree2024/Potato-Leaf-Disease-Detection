@@ -4,7 +4,11 @@ import numpy as np
 from PIL import Image
 
 # Load trained model
-model = tf.keras.models.load_model("potato_model.h5")
+model = tf.keras.models.load_model(
+    "potato_model.h5",
+    compile=False,
+    safe_mode=False
+)
 
 # Disease classes
 classes = [
@@ -28,11 +32,7 @@ if uploaded_file is not None:
 
     image = Image.open(uploaded_file)
 
-    st.image(
-        image,
-        caption="Uploaded Leaf Image",
-        use_container_width=True
-    )
+    st.image(image, caption="Uploaded Image")
 
     # Resize image
     img = image.resize((128, 128))
@@ -44,10 +44,7 @@ if uploaded_file is not None:
     img_array = img_array / 255.0
 
     # Expand dimensions
-    img_array = np.expand_dims(
-        img_array,
-        axis=0
-    )
+    img_array = np.expand_dims(img_array, axis=0)
 
     # Prediction
     prediction = model.predict(img_array)
